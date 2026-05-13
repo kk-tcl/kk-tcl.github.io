@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="个人作品集网站 - 创意开发与设计">
+  <title>Lin — 创意开发者</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Page Transition -->
+  <div class="page-transition"></div>
+
+  <!-- tsParticles Canvas -->
+  <div id="particles-js"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="index.html" class="nav__logo">LIN</a>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">首页</a></li>
+      <li><a href="about.html" class="nav__link">关于</a></li>
+      <li><a href="works.html" class="nav__link">作品</a></li>
+      <li><a href="contact.html" class="nav__link">联系</a></li>
+    </ul>
+    <button class="nav__menu-btn" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav">
+    <button class="mobile-nav__close" aria-label="关闭">✕</button>
+    <a href="index.html" class="mobile-nav__link">首页</a>
+    <a href="about.html" class="mobile-nav__link">关于</a>
+    <a href="works.html" class="mobile-nav__link">作品</a>
+    <a href="contact.html" class="mobile-nav__link">联系</a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero__content">
+      <p class="hero__greeting" style="transform: translateY(20px);">Hello，我是</p>
+      <h1 class="hero__name" style="transform: translateY(20px);">林</h1>
+      <p class="hero__title" style="transform: translateY(20px);">创意开发者 / 设计师 / 技术探索者</p>
+      <p class="hero__description" style="transform: translateY(20px);">
+        专注于构建数字世界中的独特体验。在代码与设计的交汇处，
+        寻找那些让技术具有温度的瞬间。
+      </p>
+      <div class="hero__cta" style="transform: translateY(20px);">
+        <a href="works.html" class="btn btn--primary btn--arrow">探索作品</a>
+        <a href="contact.html" class="btn btn--ghost">取得联系</a>
+      </div>
+    </div>
+
+    <div class="hero__scroll" style="transform: translateY(20px);">
+      <span>滚动探索</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Featured Works -->
+  <section class="section">
+    <p class="section__label" data-animate>精选作品</p>
+    <h2 class="section__title" data-animate>近期创作</h2>
+
+    <div class="featured-grid">
+      <article class="featured-card" data-animate>
+        <p class="featured-card__index">01</p>
+        <h3 class="featured-card__title">云影 — 智能办公空间</h3>
+        <div class="featured-card__tags">
+          <span class="featured-card__tag">React</span>
+          <span class="featured-card__tag">Node.js</span>
+          <span class="featured-card__tag">WebSocket</span>
+        </div>
+        <p class="featured-card__desc">
+          面向远程团队的新一代协作平台，融合实时白板、
+          视频会议与文档协同，让距离不再是障碍。
+        </p>
+        <span class="featured-card__arrow">↗</span>
+      </article>
+
+      <article class="featured-card" data-animate>
+        <p class="featured-card__index">02</p>
+        <h3 class="featured-card__title">墨韵 — AI 书法生成</h3>
+        <div class="featured-card__tags">
+          <span class="featured-card__tag">Python</span>
+          <span class="featured-card__tag">GAN</span>
+          <span class="featured-card__tag">Flask</span>
+        </div>
+        <p class="featured-card__desc">
+          基于生成对抗网络的中国书法艺术创作工具，
+          让传统艺术在数字时代焕发新的生命力。
+        </p>
+        <span class="featured-card__arrow">↗</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="section" style="padding-top: 2px;">
+    <div class="stats-row" data-animate>
+      <div class="stat-item">
+        <div class="stat-item__number" data-count="6" data-suffix="+">0</div>
+        <p class="stat-item__label">年开发经验</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-item__number" data-count="40" data-suffix="+">0</div>
+        <p class="stat-item__label">完成项目</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-item__number" data-count="15" data-suffix="+">0</div>
+        <p class="stat-item__label">合作客户</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-item__number" data-count="3" data-suffix="K+">0</div>
+        <p class="stat-item__label">社区关注</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p class="footer__copy">&copy; 2026 Lin. All rights reserved.</p>
+    <div class="footer__links">
+      <a href="https://github.com" class="footer__link" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://twitter.com" class="footer__link" target="_blank" rel="noopener">Twitter</a>
+      <a href="mailto:hello@example.com" class="footer__link">Email</a>
+    </div>
+  </footer>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

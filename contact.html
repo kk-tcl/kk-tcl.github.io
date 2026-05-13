@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="联系我 — 合作与交流">
+  <title>联系 — Lin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="page-transition"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="index.html" class="nav__logo">LIN</a>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">首页</a></li>
+      <li><a href="about.html" class="nav__link">关于</a></li>
+      <li><a href="works.html" class="nav__link">作品</a></li>
+      <li><a href="contact.html" class="nav__link">联系</a></li>
+    </ul>
+    <button class="nav__menu-btn" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-nav">
+    <button class="mobile-nav__close" aria-label="关闭">✕</button>
+    <a href="index.html" class="mobile-nav__link">首页</a>
+    <a href="about.html" class="mobile-nav__link">关于</a>
+    <a href="works.html" class="mobile-nav__link">作品</a>
+    <a href="contact.html" class="mobile-nav__link">联系</a>
+  </div>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <p class="page-header__eyebrow">Contact</p>
+    <h1 class="page-header__title">联系我</h1>
+    <div class="page-header__line"></div>
+  </header>
+
+  <!-- Contact Layout -->
+  <section class="section" style="padding-top: 0;">
+    <div class="contact-layout">
+      <!-- Form -->
+      <div class="contact-form-wrap" data-animate>
+        <p class="section__label" style="margin-bottom: 2rem;">发送消息</p>
+        <form id="contact-form">
+          <div class="form-group">
+            <label class="form-label" for="name">姓名</label>
+            <input class="form-input" type="text" id="name" name="name" placeholder="你的名字" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">邮箱</label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="subject">主题</label>
+            <input class="form-input" type="text" id="subject" name="subject" placeholder="合作 / 项目委托 / 其他" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">内容</label>
+            <textarea class="form-textarea" id="message" name="message" placeholder="请描述你的想法……" required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary form-submit btn--arrow">
+            发送消息
+          </button>
+        </form>
+      </div>
+
+      <!-- Info -->
+      <div class="contact-info-wrap" data-animate>
+        <p class="section__label" style="margin-bottom: 2rem;">联系方式</p>
+
+        <div class="contact-detail">
+          <p class="contact-detail__label">邮箱</p>
+          <p class="contact-detail__value">hello@example.com</p>
+        </div>
+        <div class="contact-detail">
+          <p class="contact-detail__label">微信</p>
+          <p class="contact-detail__value">lin_design</p>
+        </div>
+        <div class="contact-detail">
+          <p class="contact-detail__label">位置</p>
+          <p class="contact-detail__value">中国 · 上海</p>
+        </div>
+
+        <div class="contact-socials">
+          <a href="https://github.com" class="social-link" target="_blank" rel="noopener" title="GitHub">GH</a>
+          <a href="https://twitter.com" class="social-link" target="_blank" rel="noopener" title="Twitter">TW</a>
+          <a href="https://dribbble.com" class="social-link" target="_blank" rel="noopener" title="Dribbble">Dr</a>
+          <a href="https://linkedin.com" class="social-link" target="_blank" rel="noopener" title="LinkedIn">In</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p class="footer__copy">&copy; 2026 Lin. All rights reserved.</p>
+    <div class="footer__links">
+      <a href="https://github.com" class="footer__link" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://twitter.com" class="footer__link" target="_blank" rel="noopener">Twitter</a>
+      <a href="mailto:hello@example.com" class="footer__link">Email</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
