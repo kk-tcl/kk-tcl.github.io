@@ -3,22 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="联系我 — 合作与交流">
-  <title>联系 — Lin</title>
+  <meta name="description" content="联系汤晨露 — 合作与交流">
+  <title>联系 — 汤晨露</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+  <div class="cursor" id="cursor"></div>
+
   <div class="page-transition"></div>
 
-  <!-- Navigation -->
   <nav class="nav">
-    <a href="index.html" class="nav__logo">LIN</a>
+    <a href="index.html" class="nav__logo">汤晨露</a>
     <ul class="nav__links">
       <li><a href="index.html" class="nav__link">首页</a></li>
       <li><a href="about.html" class="nav__link">关于</a></li>
@@ -38,17 +39,18 @@
     <a href="contact.html" class="mobile-nav__link">联系</a>
   </div>
 
-  <!-- Page Header -->
   <header class="page-header">
     <p class="page-header__eyebrow">Contact</p>
     <h1 class="page-header__title">联系我</h1>
-    <div class="page-header__line"></div>
+    <div class="page-header__line page-header__line--organic">
+      <svg viewBox="0 0 180 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 16 C 30 2, 50 14, 80 8 C 110 2, 130 16, 160 7 C 170 5, 175 6, 178 6" stroke="#c17a5c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
   </header>
 
-  <!-- Contact Layout -->
   <section class="section" style="padding-top: 0;">
     <div class="contact-layout">
-      <!-- Form -->
       <div class="contact-form-wrap" data-animate>
         <p class="section__label" style="margin-bottom: 2rem;">发送消息</p>
         <form id="contact-form">
@@ -62,7 +64,7 @@
           </div>
           <div class="form-group">
             <label class="form-label" for="subject">主题</label>
-            <input class="form-input" type="text" id="subject" name="subject" placeholder="合作 / 项目委托 / 其他" required>
+            <input class="form-input" type="text" id="subject" name="subject" placeholder="合作 / 委托 / 其他" required>
           </div>
           <div class="form-group">
             <label class="form-label" for="message">内容</label>
@@ -74,44 +76,44 @@
         </form>
       </div>
 
-      <!-- Info -->
       <div class="contact-info-wrap" data-animate>
         <p class="section__label" style="margin-bottom: 2rem;">联系方式</p>
 
         <div class="contact-detail">
           <p class="contact-detail__label">邮箱</p>
-          <p class="contact-detail__value">hello@example.com</p>
+          <p class="contact-detail__value">hello@tangchenlu.art</p>
         </div>
         <div class="contact-detail">
-          <p class="contact-detail__label">微信</p>
-          <p class="contact-detail__value">lin_design</p>
+          <p class="contact-detail__label">小红书</p>
+          <p class="contact-detail__value">汤晨露 · ID: 6369948293</p>
         </div>
         <div class="contact-detail">
-          <p class="contact-detail__label">位置</p>
-          <p class="contact-detail__value">中国 · 上海</p>
+          <p class="contact-detail__label">所在地</p>
+          <p class="contact-detail__value">中国</p>
         </div>
 
         <div class="contact-socials">
-          <a href="https://github.com" class="social-link" target="_blank" rel="noopener" title="GitHub">GH</a>
-          <a href="https://twitter.com" class="social-link" target="_blank" rel="noopener" title="Twitter">TW</a>
-          <a href="https://dribbble.com" class="social-link" target="_blank" rel="noopener" title="Dribbble">Dr</a>
-          <a href="https://linkedin.com" class="social-link" target="_blank" rel="noopener" title="LinkedIn">In</a>
+          <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="xiaohongshu-link" target="_blank" rel="noopener">
+            小红书 @汤晨露
+          </a>
+        </div>
+
+        <div class="contact-socials">
+          <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="social-link" target="_blank" rel="noopener" title="小红书">红</a>
+          <a href="mailto:hello@tangchenlu.art" class="social-link" title="Email">@</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
-    <p class="footer__copy">&copy; 2026 Lin. All rights reserved.</p>
+    <p class="footer__copy">&copy; 2026 汤晨露. All rights reserved.</p>
     <div class="footer__links">
-      <a href="https://github.com" class="footer__link" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://twitter.com" class="footer__link" target="_blank" rel="noopener">Twitter</a>
-      <a href="mailto:hello@example.com" class="footer__link">Email</a>
+      <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="footer__link" target="_blank" rel="noopener">小红书</a>
+      <a href="mailto:hello@tangchenlu.art" class="footer__link">Email</a>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="js/main.js"></script>
 </body>

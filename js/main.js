@@ -1,18 +1,59 @@
 /**
- * Personal Website — Main JavaScript
- * Handles: tsParticles, GSAP animations, navigation, scroll effects, form handling
+ * 汤晨露 — Personal Art Portfolio
+ * Creative effects, smooth transitions, custom cursor
  */
-
 document.addEventListener('DOMContentLoaded', () => {
+  initCustomCursor();
   initNavigation();
   initScrollAnimations();
   initPageTransitions();
-  initParticles();
   initHeroAnimation();
   initWorkFilters();
+  initLightbox();
   initContactForm();
-  initCounters();
 });
+
+/* ============================================
+   Custom Cursor
+   ============================================ */
+function initCustomCursor() {
+  const cursor = document.getElementById('cursor');
+  if (!cursor || window.matchMedia('(max-width: 768px)').matches) {
+    if (cursor) cursor.style.display = 'none';
+    return;
+  }
+
+  let mouseX = 0, mouseY = 0;
+  let cursorX = 0, cursorY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  // Hover states
+  const hoverTargets = document.querySelectorAll('a, button, .work-card, .featured-card, .filter-btn');
+  hoverTargets.forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('cursor--hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('cursor--hover'));
+  });
+
+  // Smooth follow with requestAnimationFrame
+  function animate() {
+    const dx = mouseX - cursorX;
+    const dy = mouseY - cursorY;
+    cursorX += dx * 0.15;
+    cursorY += dy * 0.15;
+    cursor.style.left = cursorX + 'px';
+    cursor.style.top = cursorY + 'px';
+    requestAnimationFrame(animate);
+  }
+
+  // Initialize position
+  cursorX = mouseX;
+  cursorY = mouseY;
+  animate();
+}
 
 /* ============================================
    Navigation
@@ -24,19 +65,16 @@ function initNavigation() {
   const mobileClose = document.querySelector('.mobile-nav__close');
   const mobileLinks = document.querySelectorAll('.mobile-nav__link');
 
-  // Scroll effect
-  let lastScroll = 0;
+  // Scroll-aware nav
   window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    if (currentScroll > 50) {
+    if (window.pageYOffset > 50) {
       nav.classList.add('nav--scrolled');
     } else {
       nav.classList.remove('nav--scrolled');
     }
-    lastScroll = currentScroll;
   }, { passive: true });
 
-  // Highlight current page link
+  // Active page detection
   const currentPath = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav__link').forEach(link => {
     const href = link.getAttribute('href');
@@ -47,19 +85,13 @@ function initNavigation() {
 
   // Mobile menu
   if (menuBtn && mobileNav) {
-    menuBtn.addEventListener('click', () => {
-      mobileNav.classList.add('mobile-nav--open');
-    });
+    menuBtn.addEventListener('click', () => mobileNav.classList.add('mobile-nav--open'));
   }
   if (mobileClose) {
-    mobileClose.addEventListener('click', () => {
-      mobileNav.classList.remove('mobile-nav--open');
-    });
+    mobileClose.addEventListener('click', () => mobileNav.classList.remove('mobile-nav--open'));
   }
   mobileLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      mobileNav.classList.remove('mobile-nav--open');
-    });
+    link.addEventListener('click', () => mobileNav.classList.remove('mobile-nav--open'));
   });
 }
 
@@ -67,9 +99,8 @@ function initNavigation() {
    Scroll Animations (Intersection Observer)
    ============================================ */
 function initScrollAnimations() {
-  const animatedElements = document.querySelectorAll('[data-animate]');
-
-  if (animatedElements.length === 0) return;
+  const elements = document.querySelectorAll('[data-animate]');
+  if (elements.length === 0) return;
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -79,42 +110,51 @@ function initScrollAnimations() {
       }
     });
   }, {
-    threshold: 0.15,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.1,
+    rootMargin: '0px 0px -40px 0px'
   });
 
-  animatedElements.forEach(el => observer.observe(el));
+  elements.forEach(el => observer.observe(el));
 }
 
 /* ============================================
-   Page Transitions
+   Page Transitions — Smooth fade-up reveal
    ============================================ */
 function initPageTransitions() {
   const overlay = document.querySelector('.page-transition');
-  if (!overlay) return;
+  if (!overlay || typeof gsap === 'undefined') return;
 
-  // Entrance: reveal page
+  // Entrance: reveal the page with a warm curtain lift
   gsap.to(overlay, {
     scaleY: 0,
-    duration: 0.8,
-    ease: 'power4.inOut',
+    duration: 0.7,
+    ease: 'power3.inOut',
     transformOrigin: 'bottom',
-    delay: 0.1
+    delay: 0.05
   });
 
-  // Exit: clicking internal links
+  // Exit: cover page on internal link click
   document.querySelectorAll('a[href$=".html"]').forEach(link => {
     link.addEventListener('click', (e) => {
       const href = link.getAttribute('href');
-      // Skip if external or same page
-      if (!href || href.startsWith('http') || href.startsWith('#')) return;
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+      if (!href || href.startsWith('http') || href.startsWith('#') || href === currentPage) return;
 
       e.preventDefault();
+
+      // Brief content fade before overlay covers
+      gsap.to('body > *:not(.page-transition):not(.cursor):not(.mobile-nav)', {
+        opacity: 0,
+        duration: 0.2,
+        ease: 'power2.out'
+      });
+
       gsap.to(overlay, {
         scaleY: 1,
         duration: 0.5,
-        ease: 'power4.inOut',
+        ease: 'power3.inOut',
         transformOrigin: 'top',
+        delay: 0.15,
         onComplete: () => {
           window.location.href = href;
         }
@@ -124,71 +164,7 @@ function initPageTransitions() {
 }
 
 /* ============================================
-   tsParticles Background
-   ============================================ */
-function initParticles() {
-  const container = document.getElementById('particles-js');
-  if (!container || typeof tsParticles === 'undefined') return;
-
-  tsParticles.load('particles-js', {
-    fullScreen: false,
-    fpsLimit: 60,
-    particles: {
-      number: {
-        value: 50,
-        density: { enable: true, area: 800 }
-      },
-      color: { value: '#00e5ff' },
-      shape: { type: 'circle' },
-      opacity: {
-        value: 0.15,
-        random: true,
-        animation: {
-          enable: true,
-          speed: 0.5,
-          minimumValue: 0.05
-        }
-      },
-      size: {
-        value: 2,
-        random: true
-      },
-      links: {
-        enable: true,
-        distance: 150,
-        color: '#00e5ff',
-        opacity: 0.08,
-        width: 1
-      },
-      move: {
-        enable: true,
-        speed: 0.8,
-        direction: 'none',
-        random: true,
-        straight: false,
-        outModes: { default: 'bounce' }
-      }
-    },
-    interactivity: {
-      events: {
-        onHover: {
-          enable: true,
-          mode: 'grab'
-        }
-      },
-      modes: {
-        grab: {
-          distance: 180,
-          links: { opacity: 0.3, color: '#00e5ff' }
-        }
-      }
-    },
-    detectRetina: true
-  });
-}
-
-/* ============================================
-   Hero Entrance Animation (GSAP)
+   Hero Entrance Animation
    ============================================ */
 function initHeroAnimation() {
   const hero = document.querySelector('.hero__content');
@@ -197,11 +173,11 @@ function initHeroAnimation() {
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
   tl.to('.hero__greeting', { opacity: 1, y: 0, duration: 0.6 })
-    .to('.hero__name', { opacity: 1, y: 0, duration: 0.8 }, '-=0.3')
-    .to('.hero__title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
-    .to('.hero__description', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+    .to('.hero__name', { opacity: 1, y: 0, duration: 0.8 }, '-=0.35')
+    .to('.hero__title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.45')
+    .to('.hero__description', { opacity: 1, y: 0, duration: 0.6 }, '-=0.35')
     .to('.hero__cta', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
-    .to('.hero__scroll', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3');
+    .to('.hero__scroll', { opacity: 1, y: 0, duration: 0.5 }, '-=0.3');
 }
 
 /* ============================================
@@ -210,31 +186,75 @@ function initHeroAnimation() {
 function initWorkFilters() {
   const filterBtns = document.querySelectorAll('.filter-btn');
   const workCards = document.querySelectorAll('.work-card');
-
   if (filterBtns.length === 0) return;
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      // Update active state
       filterBtns.forEach(b => b.classList.remove('filter-btn--active'));
       btn.classList.add('filter-btn--active');
 
       const category = btn.dataset.filter;
 
-      // Filter cards
-      workCards.forEach(card => {
+      workCards.forEach((card, i) => {
         if (category === 'all' || card.dataset.category === category) {
           card.style.display = 'block';
-          // Stagger reveal
-          gsap.fromTo(card,
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
-          );
+          if (typeof gsap !== 'undefined') {
+            gsap.fromTo(card,
+              { opacity: 0, y: 20 },
+              { opacity: 1, y: 0, duration: 0.4, delay: i * 0.06, ease: 'power2.out' }
+            );
+          }
         } else {
           card.style.display = 'none';
         }
       });
     });
+  });
+}
+
+/* ============================================
+   Artwork Lightbox
+   ============================================ */
+function initLightbox() {
+  const lightbox = document.getElementById('lightbox');
+  if (!lightbox) return;
+
+  const lightboxPlaceholder = document.getElementById('lightbox-placeholder');
+  const lightboxTitle = document.getElementById('lightbox-title');
+  const lightboxMeta = document.getElementById('lightbox-meta');
+  const lightboxDesc = document.getElementById('lightbox-desc');
+  const lightboxClose = document.getElementById('lightbox-close');
+
+  document.querySelectorAll('.work-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const placeholder = card.querySelector('.work-card__image-placeholder');
+      const title = card.querySelector('.work-card__title');
+      const category = card.querySelector('.work-card__category');
+      const desc = card.querySelector('.work-card__desc');
+
+      if (placeholder) lightboxPlaceholder.textContent = placeholder.textContent;
+      if (title) lightboxTitle.textContent = title.textContent;
+      if (category) lightboxMeta.textContent = category.textContent;
+      if (desc) lightboxDesc.textContent = desc.textContent;
+
+      lightbox.classList.add('lightbox--open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove('lightbox--open');
+    document.body.style.overflow = '';
+  }
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('lightbox--open')) {
+      closeLightbox();
+    }
   });
 }
 
@@ -251,14 +271,13 @@ function initContactForm() {
     const submitBtn = form.querySelector('.form-submit');
     const originalText = submitBtn.textContent;
 
-    // Simulate submission
     submitBtn.textContent = '发送中...';
     submitBtn.disabled = true;
 
     setTimeout(() => {
       submitBtn.textContent = '✓ 发送成功！';
       submitBtn.style.background = 'var(--accent-green)';
-      submitBtn.style.color = 'var(--bg-primary)';
+      submitBtn.style.color = '#fff';
       form.reset();
 
       setTimeout(() => {
@@ -269,42 +288,4 @@ function initContactForm() {
       }, 2500);
     }, 1200);
   });
-}
-
-/* ============================================
-   Counter Animation
-   ============================================ */
-function initCounters() {
-  const counters = document.querySelectorAll('.stat-item__number[data-count]');
-  if (counters.length === 0) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const target = parseInt(el.dataset.count, 10);
-        const suffix = el.dataset.suffix || '';
-        const duration = 2000;
-        const startTime = performance.now();
-
-        function update(currentTime) {
-          const elapsed = currentTime - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          // Ease-out curve
-          const eased = 1 - Math.pow(1 - progress, 3);
-          const current = Math.round(target * eased);
-          el.textContent = current + suffix;
-
-          if (progress < 1) {
-            requestAnimationFrame(update);
-          }
-        }
-
-        requestAnimationFrame(update);
-        observer.unobserve(el);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  counters.forEach(el => observer.observe(el));
 }
