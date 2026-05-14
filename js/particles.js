@@ -1,5 +1,5 @@
 /**
- * tsparticles — subtle space dust background
+ * tsparticles — minimal space dust background, performance-tuned
  */
 function initParticles() {
   if (typeof tsParticles === 'undefined') return;
@@ -8,20 +8,19 @@ function initParticles() {
 
   tsParticles.load("particles-bg", {
     particles: {
-      number: { value: isMobile ? 30 : 60 },
+      number: { value: isMobile ? 15 : 35 },
       color: { value: "#ffffff" },
       shape: { type: "circle" },
       opacity: {
-        value: { min: 0.03, max: 0.2 },
-        animation: { enable: true, speed: 0.3, sync: false }
+        value: { min: 0.03, max: 0.18 },
+        animation: { enable: true, speed: 0.2, sync: false }
       },
       size: {
-        value: { min: 0.5, max: 2 },
-        animation: { enable: true, speed: 0.8, sync: false }
+        value: { min: 0.5, max: 1.8 },
       },
       move: {
         enable: true,
-        speed: { min: 0.1, max: 0.4 },
+        speed: { min: 0.08, max: 0.3 },
         direction: "none",
         random: true,
         straight: false,
@@ -30,13 +29,10 @@ function initParticles() {
     },
     interactivity: {
       events: {
-        onHover: { enable: true, mode: "repulse" }
-      },
-      modes: {
-        repulse: { distance: 60, duration: 0.4 }
+        onHover: { enable: false }
       }
     },
     background: { color: "transparent" },
-    detectRetina: true
+    detectRetina: false
   });
 }

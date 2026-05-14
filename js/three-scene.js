@@ -1,6 +1,5 @@
 /**
- * Three.js 3D Floating Card System
- * ES Module — self-initializes, sets window.__threeReady or window.__threeError
+ * Three.js 3D Floating Card System — Performance Optimized
  */
 import * as THREE from 'three';
 
@@ -16,8 +15,8 @@ const artworks = [
 
 // ── Globals ───────────────────────────────────────
 let scene, camera, renderer, cardGroup;
-let cardMeshes = [];       // flat array of main plane meshes for raycasting
-let cardDataMap = [];      // maps mesh → { group, initialY, initialZ, baseColor, glowMesh }
+let cardMeshes = [];
+let cardDataMap = [];
 let lastHovered = null;
 let isMobile = false;
 
@@ -26,69 +25,53 @@ const target = { x: 0, y: 0 };
 const current = { x: 0, y: 0 };
 const pointer = new THREE.Vector2();
 const raycaster = new THREE.Raycaster();
-
-// ── Rounded Rectangle Geometry ────────────────────
-function createRoundedRectGeometry(width, height, radius, segments) {
-  const shape = new THREE.Shape();
-  const x = -width / 2;
-  const y = -height / 2;
-  const r = Math.min(radius, width / 2, height / 2);
-
-  shape.moveTo(x + r, y);
-  shape.lineTo(x + width - r, y);
-  shape.quadraticCurveTo(x + width, y, x + width, y + r);
-  shape.lineTo(x + width, y + height - r);
-  shape.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
-  shape.lineTo(x + r, y + height);
-  shape.quadraticCurveTo(x, y + height, x, y + height - r);
-  shape.lineTo(x, y + r);
-  shape.quadraticCurveTo(x, y, x + r, y);
-
-  return new THREE.ShapeGeometry(shape, segments, segments);
-}
+let raycasterThrottle = 0;
+let lastOpacity = 1;
 
 // ── Create Card Mesh ──────────────────────────────
 function createCardMesh(artwork, index) {
   const group = new THREE.Group();
 
-  // Glow border (behind card, slightly larger)
-  const glowGeo = createRoundedRectGeometry(1.5, 1.95, 0.1, 4);
+  // Glow border (behind card, slightly larger) — simple plane
+  const glowGeo = new THREE.PlaneGeometry(1.55, 1.95);
   const glowMat = new THREE.MeshBasicMaterial({
     color: new THREE.Color(artwork.color),
     opacity: 0.12,
     transparent: true,
     side: THREE.DoubleSide,
+    depthWrite: false,
   });
   const glowMesh = new THREE.Mesh(glowGeo, glowMat);
   glowMesh.position.z = -0.02;
   group.add(glowMesh);
 
-  // Main card face
-  const cardGeo = createRoundedRectGeometry(1.4, 1.85, 0.08, 4);
+  // Main card face — simple plane
+  const cardGeo = new THREE.PlaneGeometry(1.4, 1.85);
   const cardMat = new THREE.MeshStandardMaterial({
     color: new THREE.Color(artwork.color),
     roughness: 0.4,
     metalness: 0.05,
     side: THREE.DoubleSide,
+    depthWrite: true,
   });
   const cardMesh = new THREE.Mesh(cardGeo, cardMat);
   cardMesh.userData = { artworkIndex: index };
   group.add(cardMesh);
 
-  // Try loading texture from images folder
+  // Load texture
   const textureLoader = new THREE.TextureLoader();
-  const imgName = artwork.id;
   textureLoader.load(
-    `images/${imgName}.jpg`,
+    `images/${artwork.id}.jpg`,
     (texture) => {
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.generateMipmaps = false;
       cardMat.map = texture;
       cardMat.color.set('#ffffff');
       cardMat.needsUpdate = true;
     },
     undefined,
-    () => {
-      // Fallback: use colored material — already set
-    }
+    () => {} // fallback: colored material
   );
 
   group.userData = {
@@ -101,7 +84,14 @@ function createCardMesh(artwork, index) {
   };
 
   cardMeshes.push(cardMesh);
-  cardDataMap.push({ group, glowMesh, glowMat, cardMat, baseColor: new THREE.Color(artwork.color), artwork });
+  cardDataMap.push({
+    group,
+    glowMesh,
+    glowMat,
+    cardMat,
+    baseColor: new THREE.Color(artwork.color),
+    artwork,
+  });
 
   return group;
 }
@@ -119,9 +109,9 @@ function setupScene() {
   camera = new THREE.PerspectiveCamera(55, w / h, 0.1, 50);
   camera.position.set(0, 0, 9);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
   renderer.setSize(w, h);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   container.appendChild(renderer.domElement);
 
@@ -135,18 +125,16 @@ function setupScene() {
   cardGroup = new THREE.Group();
   scene.add(cardGroup);
 
-  // Position cards in orbital layout
-  // Inner ring: 3 cards, radius ~2.8; Outer ring: 3 cards, radius ~4.5
+  // Orbital layout
   const positions = [
-    { angle: -0.7, radius: 2.6, y: 0.4,  z: 0.3,  ry: 0.3 },
-    { angle: 0.05, radius: 2.9, y: -0.15, z: -0.1, ry: -0.05 },
-    { angle: 0.7,  radius: 2.6, y: 0.55, z: 0.2,  ry: -0.35 },
-    { angle: -1.1, radius: 4.2, y: -0.5, z: -0.7, ry: 0.45 },
-    { angle: -0.25,radius: 4.0, y: 0.1,  z: -0.9, ry: -0.15 },
-    { angle: 1.1,  radius: 4.2, y: -0.3, z: -0.5, ry: -0.5 },
+    { angle: -0.7,  radius: 2.6, y: 0.4,  z: 0.3,  ry: 0.3 },
+    { angle: 0.05,  radius: 2.9, y: -0.15, z: -0.1, ry: -0.05 },
+    { angle: 0.7,   radius: 2.6, y: 0.55, z: 0.2,  ry: -0.35 },
+    { angle: -1.1,  radius: 4.2, y: -0.5, z: -0.7, ry: 0.45 },
+    { angle: -0.25, radius: 4.0, y: 0.1,  z: -0.9, ry: -0.15 },
+    { angle: 1.1,   radius: 4.2, y: -0.3, z: -0.5, ry: -0.5 },
   ];
 
-  const groups = [];
   artworks.forEach((art, i) => {
     const group = createCardMesh(art, i);
     const pos = positions[i] || positions[0];
@@ -156,35 +144,38 @@ function setupScene() {
       pos.z + Math.cos(pos.angle) * pos.radius * 0.5
     );
     group.rotation.y = pos.ry;
-    cardGroup.add(group);
-    groups.push(group);
-  });
 
-  // Store initial Y and Z positions for each group
-  groups.forEach((g, i) => {
-    g.userData.initialY = g.position.y;
-    g.userData.initialZ = g.position.z;
-    g.userData.cardGroup = g;
+    // Store initial Y/Z for float animation
+    group.userData.initialY = group.position.y;
+    group.userData.initialZ = group.position.z;
+
+    cardGroup.add(group);
   });
 }
 
 // ── Hover Handlers ────────────────────────────────
 function hoverCard(data) {
-  const { group, glowMat } = data;
-  gsap.to(group.scale, { x: 1.15, y: 1.15, duration: 0.5, ease: 'power2.out', overwrite: true });
-  gsap.to(glowMat, { opacity: 0.35, duration: 0.5, overwrite: true });
+  data.group.scale.set(1.15, 1.15, 1.15);
+  data.glowMat.opacity = 0.35;
+  data.glowMat.needsUpdate = true;
 }
 
 function unhoverCard(data) {
-  const { group, glowMat } = data;
-  gsap.to(group.scale, { x: 1, y: 1, duration: 0.5, ease: 'power2.out', overwrite: true });
-  gsap.to(glowMat, { opacity: 0.12, duration: 0.5, overwrite: true });
+  data.group.scale.set(1, 1, 1);
+  data.glowMat.opacity = 0.12;
+  data.glowMat.needsUpdate = true;
 }
 
-function handleHover(intersects) {
+function handleHover() {
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObjects(cardMeshes);
+
   if (intersects.length > 0) {
     const mesh = intersects[0].object;
-    const data = cardDataMap.find(d => d.group.userData.cardMesh === mesh || d.group.userData.cardGroup.contains(mesh));
+    const data = cardDataMap.find(d => {
+      const g = d.group;
+      return g.userData.cardMesh === mesh || g.children.includes(mesh);
+    });
     if (!data) {
       if (lastHovered) { unhoverCard(lastHovered); lastHovered = null; }
       return;
@@ -204,10 +195,7 @@ function handleHover(intersects) {
 
 // ── Click Handler ─────────────────────────────────
 function onDocumentClick(e) {
-  // Don't intercept clicks on interactive DOM elements
   if (e.target.closest('a, button, input, textarea, .project-item, .filter-btn')) return;
-
-  // Check if hovering a card
   if (!lastHovered) return;
 
   const art = lastHovered.artwork;
@@ -232,47 +220,43 @@ function animate() {
   // Mouse lerp rotation
   target.x = mouse.x * 0.35;
   target.y = mouse.y * 0.18;
-  current.x += (target.x - current.x) * 0.04;
-  current.y += (target.y - current.y) * 0.04;
+  current.x += (target.x - current.x) * 0.035;
+  current.y += (target.y - current.y) * 0.035;
   cardGroup.rotation.y = current.x;
   cardGroup.rotation.x = current.y;
 
-  // Auto-float oscillation per card
+  // Auto-float oscillation + scroll fade
+  const scrollY = window.__lenisScrollY || window.scrollY || 0;
+  const heroH = window.innerHeight;
+  const sp = Math.min(Math.max(scrollY / heroH, 0), 1);
+  const targetOpacity = 1 - sp * 0.9;
+
   cardGroup.children.forEach((group, i) => {
     if (!group.userData) return;
     const iniY = group.userData.initialY || group.position.y;
     const iniZ = group.userData.initialZ || group.position.z;
-    const floatY = Math.sin(time * 0.7 + i * 1.1) * 0.12;
-    const floatZ = Math.cos(time * 0.55 + i * 0.85) * 0.08;
-    group.position.y = iniY + floatY;
-    group.position.z = iniZ + floatZ;
-  });
+    group.position.y = iniY + Math.sin(time * 0.7 + i + group.position.x * 0.3) * 0.1;
+    group.position.z = iniZ + Math.cos(time * 0.5 + i * 0.8) * 0.06;
 
-  // Scroll-driven camera zoom
-  const scrollY = window.__lenisScrollY || window.scrollY || 0;
-  const heroH = window.innerHeight;
-  const sp = Math.min(Math.max(scrollY / heroH, 0), 1);
-  const targetZ = 9 + sp * 4;
-  camera.position.z += (targetZ - camera.position.z) * 0.03;
-
-  // Fade card opacity as user scrolls past hero
-  const alpha = 1 - sp * 0.9;
-  cardGroup.children.forEach(group => {
-    if (!group.userData) return;
+    // Only update material when opacity actually changes
     const { cardMat } = group.userData;
-    if (cardMat) {
-      cardMat.opacity = Math.max(alpha, 0.1);
-      cardMat.transparent = true;
+    if (cardMat && Math.abs(cardMat.opacity - targetOpacity) > 0.005) {
+      cardMat.opacity = targetOpacity;
+      cardMat.transparent = targetOpacity < 1;
       cardMat.needsUpdate = true;
     }
   });
 
-  // Raycaster hover
-  raycaster.setFromCamera(pointer, camera);
-  const intersects = raycaster.intersectObjects(cardMeshes);
-  handleHover(intersects);
+  // Scroll-driven camera zoom
+  const targetZ = 9 + sp * 4;
+  camera.position.z += (targetZ - camera.position.z) * 0.03;
 
-  // Render
+  // Throttle raycaster to every 3 frames
+  raycasterThrottle = (raycasterThrottle + 1) % 3;
+  if (raycasterThrottle === 0) {
+    handleHover();
+  }
+
   renderer.render(scene, camera);
 }
 
@@ -293,19 +277,13 @@ function onResize() {
   renderer.setSize(w, h);
 
   isMobile = w < 768;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5));
 
-  // On mobile, hide outer ring cards for performance
   if (cardGroup) {
     cardGroup.children.forEach((group, i) => {
-      if (isMobile && i >= 3) {
-        group.visible = false;
-      } else {
-        group.visible = true;
-      }
+      group.visible = !(isMobile && i >= 4);
     });
-    // Move camera closer on mobile
-    camera.position.z = isMobile ? 11 : 9;
+    if (isMobile) camera.position.z = 11;
   }
 }
 
@@ -317,12 +295,7 @@ window.__flyThrough = function () {
     duration: 0.8,
     ease: 'power2.inOut',
     onComplete: () => {
-      gsap.to(camera.position, {
-        z: 9,
-        duration: 1.2,
-        ease: 'power2.out',
-        delay: 0.3,
-      });
+      gsap.to(camera.position, { z: 9, duration: 1.2, ease: 'power2.out', delay: 0.3 });
     },
   });
 };
@@ -335,18 +308,18 @@ async function init() {
     window.addEventListener('resize', onResize);
     document.addEventListener('click', onDocumentClick);
 
-    // Initial mobile check
+    // Initial mobile detection
     isMobile = window.matchMedia('(max-width: 768px)').matches;
     if (isMobile) {
       camera.position.z = 11;
       if (cardGroup) {
         cardGroup.children.forEach((group, i) => {
-          if (i >= 3) group.visible = false;
+          if (i >= 4) group.visible = false;
         });
       }
     }
 
-    // Mobile gyroscope fallback
+    // Mobile gyroscope
     if (isMobile && window.DeviceOrientationEvent) {
       window.addEventListener('deviceorientation', (e) => {
         if (e.beta === null) return;
@@ -357,20 +330,20 @@ async function init() {
       });
     }
 
-    // Start animation loop
     animate();
 
-    // Signal ready
     window.__threeReady = true;
 
-    // If GSAP available, hide loader smoothly
-    if (typeof gsap !== 'undefined') {
-      const loader = document.getElementById('loader');
-      if (loader) {
-        gsap.to(loader, { opacity: 0, duration: 0.6, onComplete: () => {
+    // Hide loader
+    const loader = document.getElementById('loader');
+    if (loader) {
+      setTimeout(() => {
+        loader.style.opacity = '0';
+        loader.style.transition = 'opacity 0.6s cubic-bezier(0.19,1,0.22,1)';
+        setTimeout(() => {
           if (loader.parentNode) loader.parentNode.removeChild(loader);
-        }});
-      }
+        }, 600);
+      }, 300);
     }
   } catch (err) {
     console.warn('Three.js initialization failed:', err);
@@ -378,5 +351,4 @@ async function init() {
   }
 }
 
-// Self-init
 init();
