@@ -5,101 +5,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="联系汤晨露 — 合作与交流">
   <title>联系 — 汤晨露</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-header { padding: calc(var(--nav-height) + 5rem) clamp(1.5rem, 5vw, 4rem) 3rem; max-width: var(--max-width); margin: 0 auto; }
+    .page-header__label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.8rem; }
+    .page-header__title { font-size: clamp(3rem, 8vw, 6rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+  </style>
 </head>
 <body>
-
-  <div class="cursor" id="cursor"></div>
-
-  <div class="page-transition"></div>
-
-  <nav class="nav">
-    <a href="index.html" class="nav__logo">汤晨露</a>
+  <nav class="nav" id="nav">
+    <a href="index.html#hero" class="nav__logo">Tang Chenlu</a>
     <ul class="nav__links">
-      <li><a href="index.html" class="nav__link">首页</a></li>
-      <li><a href="about.html" class="nav__link">关于</a></li>
-      <li><a href="works.html" class="nav__link">作品</a></li>
-      <li><a href="contact.html" class="nav__link">联系</a></li>
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="index.html#gallery" class="nav__link">Works</a></li>
+      <li><a href="index.html#about" class="nav__link">About</a></li>
+      <li><a href="index.html#contact" class="nav__link">Contact</a></li>
     </ul>
-    <button class="nav__menu-btn" aria-label="菜单">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="nav__menu-btn" aria-label="Menu"><span></span><span></span></button>
   </nav>
-
-  <div class="mobile-nav">
-    <button class="mobile-nav__close" aria-label="关闭">✕</button>
-    <a href="index.html" class="mobile-nav__link">首页</a>
-    <a href="about.html" class="mobile-nav__link">关于</a>
-    <a href="works.html" class="mobile-nav__link">作品</a>
-    <a href="contact.html" class="mobile-nav__link">联系</a>
+  <div class="mobile-nav" id="mobile-nav">
+    <button class="mobile-nav__close" aria-label="Close">&times;</button>
+    <a href="index.html" class="mobile-nav__link">Home</a>
+    <a href="index.html#gallery" class="mobile-nav__link">Works</a>
+    <a href="index.html#about" class="mobile-nav__link">About</a>
+    <a href="index.html#contact" class="mobile-nav__link">Contact</a>
   </div>
 
   <header class="page-header">
-    <p class="page-header__eyebrow">Contact</p>
+    <p class="page-header__label">Contact</p>
     <h1 class="page-header__title">联系我</h1>
-    <div class="page-header__line page-header__line--organic">
-      <svg viewBox="0 0 180 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 16 C 30 2, 50 14, 80 8 C 110 2, 130 16, 160 7 C 170 5, 175 6, 178 6" stroke="#c17a5c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-      </svg>
-    </div>
   </header>
 
-  <section class="section" style="padding-top: 0;">
-    <div class="contact-layout">
-      <div class="contact-form-wrap" data-animate>
-        <p class="section__label" style="margin-bottom: 2rem;">发送消息</p>
-        <form id="contact-form">
-          <div class="form-group">
-            <label class="form-label" for="name">姓名</label>
-            <input class="form-input" type="text" id="name" name="name" placeholder="你的名字" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="email">邮箱</label>
-            <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="subject">主题</label>
-            <input class="form-input" type="text" id="subject" name="subject" placeholder="合作 / 委托 / 其他" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="message">内容</label>
-            <textarea class="form-textarea" id="message" name="message" placeholder="请描述你的想法……" required></textarea>
-          </div>
-          <button type="submit" class="btn btn--primary form-submit btn--arrow">
-            发送消息
-          </button>
-        </form>
-      </div>
-
-      <div class="contact-info-wrap" data-animate>
-        <p class="section__label" style="margin-bottom: 2rem;">联系方式</p>
-
-        <div class="contact-detail">
-          <p class="contact-detail__label">邮箱</p>
-          <p class="contact-detail__value">hello@tangchenlu.art</p>
+  <section class="contact" style="padding-top: 0;">
+    <div class="contact__layout">
+      <form class="contact__form" id="contact-form" data-animate>
+        <div class="form-group">
+          <label class="form-label" for="name">Name</label>
+          <input class="form-input" type="text" id="name" name="name" placeholder="Your name" required>
         </div>
-        <div class="contact-detail">
-          <p class="contact-detail__label">小红书</p>
-          <p class="contact-detail__value">汤晨露 · ID: 6369948293</p>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com" required>
         </div>
-        <div class="contact-detail">
-          <p class="contact-detail__label">所在地</p>
-          <p class="contact-detail__value">中国</p>
+        <div class="form-group">
+          <label class="form-label" for="subject">Subject</label>
+          <input class="form-input" type="text" id="subject" name="subject" placeholder="Commission / Collaboration" required>
         </div>
+        <div class="form-group">
+          <label class="form-label" for="message">Message</label>
+          <textarea class="form-textarea" id="message" name="message" placeholder="Tell me about your project..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn--primary">Send Message</button>
+      </form>
 
-        <div class="contact-socials">
-          <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="xiaohongshu-link" target="_blank" rel="noopener">
-            小红书 @汤晨露
-          </a>
+      <div class="contact__info" data-animate>
+        <div class="contact__detail">
+          <p class="contact__detail-label">Email</p>
+          <a href="mailto:hello@tangchenlu.art" class="contact__detail-value">hello@tangchenlu.art</a>
         </div>
-
-        <div class="contact-socials">
-          <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="social-link" target="_blank" rel="noopener" title="小红书">红</a>
+        <div class="contact__detail">
+          <p class="contact__detail-label">Xiaohongshu</p>
+          <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="contact__detail-value" target="_blank" rel="noopener">汤晨露 / ID: 6369948293</a>
+        </div>
+        <div class="contact__detail">
+          <p class="contact__detail-label">Location</p>
+          <p class="contact__detail-value">China</p>
+        </div>
+        <div class="contact__socials">
+          <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="social-link" target="_blank" rel="noopener" title="Xiaohongshu">红</a>
           <a href="mailto:hello@tangchenlu.art" class="social-link" title="Email">@</a>
         </div>
       </div>
@@ -107,14 +83,39 @@
   </section>
 
   <footer class="footer">
-    <p class="footer__copy">&copy; 2026 汤晨露. All rights reserved.</p>
+    <p>&copy; 2026 汤晨露. All rights reserved.</p>
     <div class="footer__links">
-      <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="footer__link" target="_blank" rel="noopener">小红书</a>
+      <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="footer__link" target="_blank" rel="noopener">Xiaohongshu</a>
       <a href="mailto:hello@tangchenlu.art" class="footer__link">Email</a>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof initNavigation === 'function') initNavigation();
+      const els = document.querySelectorAll('[data-animate]');
+      if (els.length > 0 && window.IntersectionObserver) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        els.forEach(el => obs.observe(el));
+      }
+      // Contact form
+      const form = document.getElementById('contact-form');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const btn = form.querySelector('.btn');
+          const orig = btn.textContent;
+          btn.textContent = 'Sending...'; btn.disabled = true;
+          setTimeout(() => {
+            btn.textContent = 'Sent!'; form.reset();
+            setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 2500);
+          }, 1000);
+        });
+      }
+    });
+  </script>
 </body>
 </html>

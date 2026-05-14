@@ -3,282 +3,296 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="汤晨露 — 插画师个人作品集">
-  <title>汤晨露 — 插画师</title>
+  <meta name="description" content="汤晨露 — Illustrator & Visual Artist Portfolio">
+  <title>汤晨露 — Portfolio</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <div class="cursor" id="cursor"></div>
+  <!-- Particles Background -->
+  <div id="particles-bg"></div>
 
-  <div class="hero__blobs">
-    <div class="hero__blob"></div>
-    <div class="hero__blob"></div>
-    <div class="hero__blob"></div>
-    <div class="hero__blob"></div>
+  <!-- Three.js 3D Scene Container -->
+  <div id="three-container"></div>
+
+  <!-- Loading Screen -->
+  <div class="loader" id="loader">
+    <div class="loader__text">Loading</div>
+    <div class="loader__bar">
+      <div class="loader__bar-fill"></div>
+    </div>
   </div>
 
+  <!-- Navigation -->
   <nav class="nav" id="nav">
-    <a href="#" class="nav__logo" data-scroll-to="works">汤晨露</a>
+    <a href="#hero" class="nav__logo" data-scroll-to="hero">Tang Chenlu</a>
     <ul class="nav__links">
-      <li><a href="#works" class="nav__link" data-scroll-to="works">作品</a></li>
-      <li><a href="#about" class="nav__link" data-scroll-to="about">关于</a></li>
-      <li><a href="#contact" class="nav__link" data-scroll-to="contact">联系</a></li>
+      <li><a href="#gallery" class="nav__link" data-scroll-to="gallery">Works</a></li>
+      <li><a href="#about" class="nav__link" data-scroll-to="about">About</a></li>
+      <li><a href="#contact" class="nav__link" data-scroll-to="contact">Contact</a></li>
     </ul>
-    <button class="nav__menu-btn" aria-label="菜单">
-      <span></span><span></span><span></span>
+    <button class="nav__menu-btn" aria-label="Menu">
+      <span></span><span></span>
     </button>
   </nav>
 
-  <div class="mobile-nav">
-    <button class="mobile-nav__close" aria-label="关闭">✕</button>
-    <a href="#works" class="mobile-nav__link" data-scroll-to="works">作品</a>
-    <a href="#about" class="mobile-nav__link" data-scroll-to="about">关于</a>
-    <a href="#contact" class="mobile-nav__link" data-scroll-to="contact">联系</a>
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobile-nav">
+    <button class="mobile-nav__close" aria-label="Close">&times;</button>
+    <a href="#gallery" class="mobile-nav__link" data-scroll-to="gallery">Works</a>
+    <a href="#about" class="mobile-nav__link" data-scroll-to="about">About</a>
+    <a href="#contact" class="mobile-nav__link" data-scroll-to="contact">Contact</a>
   </div>
 
-  <!-- Works / Hero Section -->
-  <section class="works-hero" id="works">
-    <div class="works-hero__header">
-      <p class="works-hero__greeting">你好，我是</p>
-      <h1 class="works-hero__name">汤晨露</h1>
-      <p class="works-hero__subtitle">插画师 / 视觉创作者</p>
-      <p class="works-hero__desc">以画笔为媒介，在纸页与像素之间捕捉光影流转的瞬间。</p>
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero__info">
+      <h1 class="hero__name">汤晨露</h1>
+      <p class="hero__role">Illustrator / Visual Artist</p>
+      <div class="hero__contact-line">
+        <a href="mailto:hello@tangchenlu.art" class="hero__contact-link">hello@tangchenlu.art</a>
+        <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="hero__contact-link" target="_blank" rel="noopener">Xiaohongshu</a>
+      </div>
     </div>
 
-    <div class="works-filter" data-animate>
-      <button class="filter-btn filter-btn--active" data-filter="all">全部</button>
-      <button class="filter-btn" data-filter="watercolor">水彩</button>
-      <button class="filter-btn" data-filter="digital">数字绘画</button>
-      <button class="filter-btn" data-filter="sketch">手绘速写</button>
+    <button class="hero__explore" id="hero-explore" aria-label="Explore works">
+      <span class="hero__explore-icon">&#9654;</span>
+      <span class="hero__explore-label">Explore</span>
+    </button>
+
+    <div class="hero__scroll-hint">
+      <span>Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="gallery" id="gallery">
+    <div class="section-header">
+      <p class="section-header__label" data-animate>Selected Works</p>
+      <h2 class="section-header__title" data-animate>Gallery</h2>
     </div>
 
-    <div class="works-grid">
-      <article class="work-card work-card--offset-up delay-1" data-category="watercolor" data-animate>
-        <div class="work-card__image">
-          <span class="work-card__image-placeholder">春</span>
-          <span class="work-card__image-accent"></span>
-        </div>
-        <div class="work-card__info">
-          <p class="work-card__category">水彩 · 2026</p>
-          <h3 class="work-card__title">春日絮语</h3>
-          <p class="work-card__desc">以湿画法捕捉初春庭院中光影斑驳的午后，水色交融间呈现宁静与生机。</p>
+    <div class="gallery__filters" data-animate>
+      <button class="filter-btn filter-btn--active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="watercolor">Watercolor</button>
+      <button class="filter-btn" data-filter="digital">Digital</button>
+      <button class="filter-btn" data-filter="sketch">Sketch</button>
+    </div>
+
+    <div class="projects-list">
+      <article class="project-item" data-category="watercolor" data-animate>
+        <div class="project-item__index">01</div>
+        <h3 class="project-item__title">春日絮语</h3>
+        <p class="project-item__meta">Watercolor / 2026</p>
+        <div class="project-item__preview">
+          <span class="project-item__preview-placeholder">春</span>
         </div>
       </article>
 
-      <article class="work-card work-card--offset-down delay-2" data-category="digital" data-animate>
-        <div class="work-card__image">
-          <span class="work-card__image-placeholder">梦</span>
-          <span class="work-card__image-accent"></span>
-        </div>
-        <div class="work-card__info">
-          <p class="work-card__category">数字绘画 · 2025</p>
-          <h3 class="work-card__title">梦境漫游</h3>
-          <p class="work-card__desc">探索潜意识边界的系列插画，柔和的色块与有机的线条交织出梦的轮廓。</p>
+      <article class="project-item" data-category="digital" data-animate>
+        <div class="project-item__index">02</div>
+        <h3 class="project-item__title">梦境漫游</h3>
+        <p class="project-item__meta">Digital / 2025</p>
+        <div class="project-item__preview">
+          <span class="project-item__preview-placeholder">梦</span>
         </div>
       </article>
 
-      <article class="work-card work-card--offset-up delay-3" data-category="watercolor" data-animate>
-        <div class="work-card__image">
-          <span class="work-card__image-placeholder">雨</span>
-          <span class="work-card__image-accent"></span>
-        </div>
-        <div class="work-card__info">
-          <p class="work-card__category">水彩 · 2025</p>
-          <h3 class="work-card__title">雨季</h3>
-          <p class="work-card__desc">江南雨季系列之一，晕染的灰蓝色调记录石板路上倒映的天光。</p>
+      <article class="project-item" data-category="watercolor" data-animate>
+        <div class="project-item__index">03</div>
+        <h3 class="project-item__title">雨季</h3>
+        <p class="project-item__meta">Watercolor / 2025</p>
+        <div class="project-item__preview">
+          <span class="project-item__preview-placeholder">雨</span>
         </div>
       </article>
 
-      <article class="work-card work-card--offset-down delay-4" data-category="sketch" data-animate>
-        <div class="work-card__image">
-          <span class="work-card__image-placeholder">巷</span>
-          <span class="work-card__image-accent"></span>
-        </div>
-        <div class="work-card__info">
-          <p class="work-card__category">手绘速写 · 2024</p>
-          <h3 class="work-card__title">城市速写：巷弄</h3>
-          <p class="work-card__desc">钢笔淡彩记录的老城巷弄，在拆与留之间，为即将消失的风景画像。</p>
+      <article class="project-item" data-category="sketch" data-animate>
+        <div class="project-item__index">04</div>
+        <h3 class="project-item__title">城市速写：巷弄</h3>
+        <p class="project-item__meta">Sketch / 2024</p>
+        <div class="project-item__preview">
+          <span class="project-item__preview-placeholder">巷</span>
         </div>
       </article>
 
-      <article class="work-card work-card--offset-up delay-5" data-category="digital" data-animate>
-        <div class="work-card__image">
-          <span class="work-card__image-placeholder">光</span>
-          <span class="work-card__image-accent"></span>
-        </div>
-        <div class="work-card__info">
-          <p class="work-card__category">数字绘画 · 2025</p>
-          <h3 class="work-card__title">追光者</h3>
-          <p class="work-card__desc">以光影为主题的系列创作，探索不同时刻中光线与情感的交织。</p>
+      <article class="project-item" data-category="digital" data-animate>
+        <div class="project-item__index">05</div>
+        <h3 class="project-item__title">追光者</h3>
+        <p class="project-item__meta">Digital / 2025</p>
+        <div class="project-item__preview">
+          <span class="project-item__preview-placeholder">光</span>
         </div>
       </article>
 
-      <article class="work-card work-card--offset-down delay-6" data-category="watercolor" data-animate>
-        <div class="work-card__image">
-          <span class="work-card__image-placeholder">花</span>
-          <span class="work-card__image-accent"></span>
-        </div>
-        <div class="work-card__info">
-          <p class="work-card__category">水彩 · 2024</p>
-          <h3 class="work-card__title">二十四番花信风</h3>
-          <p class="work-card__desc">以中国传统节气花卉为主题的系列水彩创作，一花一时节。</p>
+      <article class="project-item" data-category="watercolor" data-animate>
+        <div class="project-item__index">06</div>
+        <h3 class="project-item__title">二十四番花信风</h3>
+        <p class="project-item__meta">Watercolor / 2024</p>
+        <div class="project-item__preview">
+          <span class="project-item__preview-placeholder">花</span>
         </div>
       </article>
     </div>
   </section>
 
   <!-- About Section -->
-  <section class="section" id="about">
-    <div class="section-decor"></div>
-    <p class="section__label" data-animate>About</p>
-    <h2 class="section__title" data-animate>关于我</h2>
+  <section class="about" id="about">
+    <div class="section-header">
+      <p class="section-header__label" data-animate>About</p>
+      <h2 class="section-header__title" data-animate>Artist</h2>
+    </div>
 
-    <div class="about-intro">
-      <div class="about-intro__image" data-animate>
-        <span class="about-intro__image-placeholder">露</span>
-      </div>
-      <div class="about-intro__text" data-animate>
-        <h2>在画笔与纸张之间，安放我对世界的想象</h2>
+    <div class="about__content">
+      <div class="about__bio" data-animate>
         <p>
           你好，我是汤晨露。一名居住在中国的插画师与视觉创作者。
           我的创作以水彩与数字绘画为主要媒介，钟情于捕捉日常生活里
           那些安静而动人的片刻。
         </p>
         <p>
-          我的创作深受东方美学与自然意象的影响。在技法上追求水彩的
+          创作深受东方美学与自然意象的影响。在技法上追求水彩的
           通透感与数字媒介的无限可能相融合；在表达上偏爱留白与含蓄，
           让画面有呼吸的余地。
         </p>
       </div>
-    </div>
 
-    <div class="skills-grid" data-animate>
-      <div class="skill-category">
-        <div class="skill-category__icon">🎨</div>
-        <h3 class="skill-category__title">传统绘画</h3>
-        <div class="skill-category__list">
-          <span class="skill-tag">水彩</span>
-          <span class="skill-tag">彩铅</span>
-          <span class="skill-tag">水墨</span>
-          <span class="skill-tag">油画棒</span>
-          <span class="skill-tag">色粉</span>
+      <div class="about__skills" data-animate>
+        <div class="skill-group">
+          <h4 class="skill-group__title">Traditional</h4>
+          <span class="tag">Watercolor</span>
+          <span class="tag">Colored Pencil</span>
+          <span class="tag">Ink</span>
+          <span class="tag">Oil Pastel</span>
+          <span class="tag">Pastel</span>
         </div>
-      </div>
-      <div class="skill-category">
-        <div class="skill-category__icon">✏️</div>
-        <h3 class="skill-category__title">数字创作</h3>
-        <div class="skill-category__list">
-          <span class="skill-tag">Procreate</span>
-          <span class="skill-tag">Photoshop</span>
-          <span class="skill-tag">Fresco</span>
-          <span class="skill-tag">Illustrator</span>
-          <span class="skill-tag">Clip Studio</span>
+        <div class="skill-group">
+          <h4 class="skill-group__title">Digital</h4>
+          <span class="tag">Procreate</span>
+          <span class="tag">Photoshop</span>
+          <span class="tag">Fresco</span>
+          <span class="tag">Illustrator</span>
+          <span class="tag">Clip Studio</span>
         </div>
-      </div>
-      <div class="skill-category">
-        <div class="skill-category__icon">🖼️</div>
-        <h3 class="skill-category__title">创作领域</h3>
-        <div class="skill-category__list">
-          <span class="skill-tag">绘本</span>
-          <span class="skill-tag">插画</span>
-          <span class="skill-tag">书籍封面</span>
-          <span class="skill-tag">品牌视觉</span>
-          <span class="skill-tag">艺术衍生品</span>
+        <div class="skill-group">
+          <h4 class="skill-group__title">Fields</h4>
+          <span class="tag">Picture Books</span>
+          <span class="tag">Illustration</span>
+          <span class="tag">Book Covers</span>
+          <span class="tag">Brand Visuals</span>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Contact Section -->
-  <section class="section" id="contact">
-    <div class="section-decor"></div>
-    <p class="section__label" data-animate>Contact</p>
-    <h2 class="section__title" data-animate>联系我</h2>
+  <section class="contact" id="contact">
+    <div class="section-header">
+      <p class="section-header__label" data-animate>Contact</p>
+      <h2 class="section-header__title" data-animate>Get in Touch</h2>
+    </div>
 
-    <div class="contact-layout">
-      <div class="contact-form-wrap" data-animate>
-        <p class="section__label" style="margin-bottom: 2rem;">发送消息</p>
-        <form id="contact-form">
-          <div class="form-group">
-            <label class="form-label" for="name">姓名</label>
-            <input class="form-input" type="text" id="name" name="name" placeholder="你的名字" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="email">邮箱</label>
-            <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="subject">主题</label>
-            <input class="form-input" type="text" id="subject" name="subject" placeholder="合作 / 委托 / 其他" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="message">内容</label>
-            <textarea class="form-textarea" id="message" name="message" placeholder="请描述你的想法……" required></textarea>
-          </div>
-          <button type="submit" class="btn btn--primary form-submit btn--arrow">
-            发送消息
-          </button>
-        </form>
-      </div>
+    <div class="contact__layout">
+      <form class="contact__form" id="contact-form" data-animate>
+        <div class="form-group">
+          <label class="form-label" for="name">Name</label>
+          <input class="form-input" type="text" id="name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="subject">Subject</label>
+          <input class="form-input" type="text" id="subject" name="subject" placeholder="Commission / Collaboration" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message">Message</label>
+          <textarea class="form-textarea" id="message" name="message" placeholder="Tell me about your project..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn--primary btn--arrow">
+          Send Message
+        </button>
+      </form>
 
-      <div class="contact-info-wrap" data-animate>
-        <p class="section__label" style="margin-bottom: 2rem;">联系方式</p>
-        <div class="contact-detail">
-          <p class="contact-detail__label">邮箱</p>
-          <p class="contact-detail__value">hello@tangchenlu.art</p>
+      <div class="contact__info" data-animate>
+        <div class="contact__detail">
+          <p class="contact__detail-label">Email</p>
+          <a href="mailto:hello@tangchenlu.art" class="contact__detail-value">hello@tangchenlu.art</a>
         </div>
-        <div class="contact-detail">
-          <p class="contact-detail__label">小红书</p>
-          <p class="contact-detail__value">汤晨露 · ID: 6369948293</p>
+        <div class="contact__detail">
+          <p class="contact__detail-label">Xiaohongshu</p>
+          <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="contact__detail-value" target="_blank" rel="noopener">汤晨露 / ID: 6369948293</a>
         </div>
-        <div class="contact-detail">
-          <p class="contact-detail__label">所在地</p>
-          <p class="contact-detail__value">中国</p>
+        <div class="contact__detail">
+          <p class="contact__detail-label">Location</p>
+          <p class="contact__detail-value">China</p>
         </div>
 
-        <div class="contact-socials">
-          <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="xiaohongshu-link" target="_blank" rel="noopener">
-            小红书 @汤晨露
-          </a>
-        </div>
-
-        <div class="contact-socials">
-          <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="social-link" target="_blank" rel="noopener" title="小红书">红</a>
+        <div class="contact__socials">
+          <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="social-link" target="_blank" rel="noopener" title="Xiaohongshu">红</a>
           <a href="mailto:hello@tangchenlu.art" class="social-link" title="Email">@</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox">
-    <div class="lightbox__content">
-      <button class="lightbox__close" id="lightbox-close">✕</button>
-      <div class="lightbox__image">
-        <span class="lightbox__image-placeholder" id="lightbox-placeholder"></span>
+  <!-- Project Detail Overlay -->
+  <div class="project-overlay" id="project-overlay">
+    <button class="project-overlay__close" id="overlay-close">&times;</button>
+    <div class="project-overlay__content">
+      <div class="project-overlay__image" id="overlay-image">
+        <span class="project-overlay__placeholder" id="overlay-placeholder"></span>
       </div>
-      <h3 class="lightbox__title" id="lightbox-title"></h3>
-      <p class="lightbox__meta" id="lightbox-meta"></p>
-      <p class="lightbox__desc" id="lightbox-desc"></p>
+      <div class="project-overlay__info">
+        <p class="project-overlay__meta" id="overlay-meta"></p>
+        <h2 class="project-overlay__title" id="overlay-title"></h2>
+        <p class="project-overlay__desc" id="overlay-desc"></p>
+      </div>
     </div>
   </div>
 
   <!-- Footer -->
   <footer class="footer">
-    <p class="footer__copy">&copy; 2026 汤晨露. All rights reserved.</p>
+    <p>&copy; 2026 汤晨露. All rights reserved.</p>
     <div class="footer__links">
-      <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="footer__link" target="_blank" rel="noopener">小红书</a>
+      <a href="https://www.xiaohongshu.com/user/profile/6369948293" class="footer__link" target="_blank" rel="noopener">Xiaohongshu</a>
       <a href="mailto:hello@tangchenlu.art" class="footer__link">Email</a>
     </div>
   </footer>
 
+  <!-- CDN Libraries -->
+  <!-- tsparticles -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+
+  <!-- GSAP + ScrollTrigger -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Lenis -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.16/dist/lenis.min.js"></script>
+
+  <!-- Three.js import map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+    }
+  }
+  </script>
+
+  <!-- Application Scripts (dependency order) -->
+  <script src="js/particles.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/scroll.js"></script>
+  <script src="js/lightbox.js"></script>
+  <script type="module" src="js/three-scene.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
