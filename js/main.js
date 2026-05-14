@@ -1,13 +1,12 @@
 /**
  * 汤晨露 — Personal Art Portfolio
- * Creative effects, smooth transitions, custom cursor
+ * Single-page design with creative effects and smooth scrolling
  */
 document.addEventListener('DOMContentLoaded', () => {
   initCustomCursor();
   initNavigation();
+  initSmoothScroll();
   initScrollAnimations();
-  initPageTransitions();
-  initHeroAnimation();
   initWorkFilters();
   initLightbox();
   initContactForm();
@@ -31,14 +30,12 @@ function initCustomCursor() {
     mouseY = e.clientY;
   });
 
-  // Hover states
-  const hoverTargets = document.querySelectorAll('a, button, .work-card, .featured-card, .filter-btn');
+  const hoverTargets = document.querySelectorAll('a, button, .work-card, .filter-btn');
   hoverTargets.forEach(el => {
     el.addEventListener('mouseenter', () => cursor.classList.add('cursor--hover'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('cursor--hover'));
   });
 
-  // Smooth follow with requestAnimationFrame
   function animate() {
     const dx = mouseX - cursorX;
     const dy = mouseY - cursorY;
@@ -49,14 +46,13 @@ function initCustomCursor() {
     requestAnimationFrame(animate);
   }
 
-  // Initialize position
   cursorX = mouseX;
   cursorY = mouseY;
   animate();
 }
 
 /* ============================================
-   Navigation
+   Navigation — single-page scroll-aware
    ============================================ */
 function initNavigation() {
   const nav = document.querySelector('.nav');
@@ -65,7 +61,7 @@ function initNavigation() {
   const mobileClose = document.querySelector('.mobile-nav__close');
   const mobileLinks = document.querySelectorAll('.mobile-nav__link');
 
-  // Scroll-aware nav
+  // Scroll-aware nav background
   window.addEventListener('scroll', () => {
     if (window.pageYOffset > 50) {
       nav.classList.add('nav--scrolled');
@@ -74,14 +70,29 @@ function initNavigation() {
     }
   }, { passive: true });
 
-  // Active page detection
-  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav__link').forEach(link => {
-    const href = link.getAttribute('href');
-    if (href === currentPath || (currentPath === '' && href === 'index.html')) {
-      link.classList.add('nav__link--active');
-    }
-  });
+  // Active section detection via scroll
+  const sections = ['works', 'about', 'contact'];
+  const navLinks = document.querySelectorAll('.nav__link');
+
+  window.addEventListener('scroll', () => {
+    const scrollPos = window.pageYOffset + 120;
+
+    sections.forEach((id) => {
+      const section = document.getElementById(id);
+      if (!section) return;
+      const top = section.offsetTop;
+      const bottom = top + section.offsetHeight;
+
+      if (scrollPos >= top && scrollPos < bottom) {
+        navLinks.forEach(link => {
+          link.classList.remove('nav__link--active');
+          if (link.getAttribute('href') === '#' + id) {
+            link.classList.add('nav__link--active');
+          }
+        });
+      }
+    });
+  }, { passive: true });
 
   // Mobile menu
   if (menuBtn && mobileNav) {
@@ -92,6 +103,22 @@ function initNavigation() {
   }
   mobileLinks.forEach(link => {
     link.addEventListener('click', () => mobileNav.classList.remove('mobile-nav--open'));
+  });
+}
+
+/* ============================================
+   Smooth Scroll — nav links & scroll-to
+   ============================================ */
+function initSmoothScroll() {
+  document.querySelectorAll('[data-scroll-to]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.dataset.scrollTo;
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   });
 }
 
@@ -118,70 +145,7 @@ function initScrollAnimations() {
 }
 
 /* ============================================
-   Page Transitions — Smooth fade-up reveal
-   ============================================ */
-function initPageTransitions() {
-  const overlay = document.querySelector('.page-transition');
-  if (!overlay || typeof gsap === 'undefined') return;
-
-  // Entrance: reveal the page with a warm curtain lift
-  gsap.to(overlay, {
-    scaleY: 0,
-    duration: 0.7,
-    ease: 'power3.inOut',
-    transformOrigin: 'bottom',
-    delay: 0.05
-  });
-
-  // Exit: cover page on internal link click
-  document.querySelectorAll('a[href$=".html"]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      const href = link.getAttribute('href');
-      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-      if (!href || href.startsWith('http') || href.startsWith('#') || href === currentPage) return;
-
-      e.preventDefault();
-
-      // Brief content fade before overlay covers
-      gsap.to('body > *:not(.page-transition):not(.cursor):not(.mobile-nav)', {
-        opacity: 0,
-        duration: 0.2,
-        ease: 'power2.out'
-      });
-
-      gsap.to(overlay, {
-        scaleY: 1,
-        duration: 0.5,
-        ease: 'power3.inOut',
-        transformOrigin: 'top',
-        delay: 0.15,
-        onComplete: () => {
-          window.location.href = href;
-        }
-      });
-    });
-  });
-}
-
-/* ============================================
-   Hero Entrance Animation
-   ============================================ */
-function initHeroAnimation() {
-  const hero = document.querySelector('.hero__content');
-  if (!hero || typeof gsap === 'undefined') return;
-
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-  tl.to('.hero__greeting', { opacity: 1, y: 0, duration: 0.6 })
-    .to('.hero__name', { opacity: 1, y: 0, duration: 0.8 }, '-=0.35')
-    .to('.hero__title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.45')
-    .to('.hero__description', { opacity: 1, y: 0, duration: 0.6 }, '-=0.35')
-    .to('.hero__cta', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
-    .to('.hero__scroll', { opacity: 1, y: 0, duration: 0.5 }, '-=0.3');
-}
-
-/* ============================================
-   Works Filter
+   Works Filter — with staggered transitions
    ============================================ */
 function initWorkFilters() {
   const filterBtns = document.querySelectorAll('.filter-btn');
@@ -198,14 +162,36 @@ function initWorkFilters() {
       workCards.forEach((card, i) => {
         if (category === 'all' || card.dataset.category === category) {
           card.style.display = 'block';
-          if (typeof gsap !== 'undefined') {
-            gsap.fromTo(card,
-              { opacity: 0, y: 20 },
-              { opacity: 1, y: 0, duration: 0.4, delay: i * 0.06, ease: 'power2.out' }
-            );
-          }
+          // Reset for animation
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(16px)';
+          card.style.transition = 'opacity 0.5s cubic-bezier(0.65,0,0.35,1), transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+          card.style.transitionDelay = (i * 0.06) + 's';
+
+          requestAnimationFrame(() => {
+            card.style.opacity = '1';
+            card.style.transform = '';
+          });
+
+          // Clean up inline transition after animation
+          setTimeout(() => {
+            card.style.transition = '';
+            card.style.transitionDelay = '';
+            card.style.opacity = '';
+          }, 600 + i * 60);
         } else {
-          card.style.display = 'none';
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(12px) scale(0.97)';
+          card.style.transition = 'opacity 0.25s ease-out, transform 0.25s ease-out';
+          card.style.transitionDelay = '0s';
+
+          setTimeout(() => {
+            card.style.display = 'none';
+            card.style.transition = '';
+            card.style.transitionDelay = '';
+            card.style.opacity = '';
+            card.style.transform = '';
+          }, 250);
         }
       });
     });
@@ -213,7 +199,7 @@ function initWorkFilters() {
 }
 
 /* ============================================
-   Artwork Lightbox
+   Artwork Lightbox — warm themed
    ============================================ */
 function initLightbox() {
   const lightbox = document.getElementById('lightbox');
